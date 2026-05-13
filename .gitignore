@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# Editor cruft
+*.swp
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# Operational run artifacts (logs accumulate per use; not source)
+runs/
