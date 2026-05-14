@@ -78,6 +78,8 @@ It should return a new Clerk entry, not mutate the original entry:
 
 Appending a separate review entry preserves the ledger. It also lets multiple reviewers or scoring versions disagree without rewriting history.
 
+For consumer-facing decision shape, see `docs/decision-contract.md`. The recommended fields `risk`, `reversibility`, `outcome_window`, and `reviewer_question` are accountability fields, not domain judgments.
+
 ## Memex Compatibility
 
 Memex trajectory entries should map into Clerk without Clerk understanding Memex's domain rules.
@@ -116,7 +118,8 @@ It is deliberately lightweight:
 - no domain-specific correctness checks.
 
 It returns a separate `decision-accountability-review` entry that can be logged with `clerk.log()`.
+When dimensions are weak, the review reason names concrete missing accountability fields where possible, such as missing `risk`, `reversibility`, or `outcome_window`.
 
 ## Next Implementation Step
 
-Use scoring v0 in one controlled consumer trial only after the ledger-usefulness review remains promising. The first trial should be Memex dry-run output, not x-growth.
+Run a second controlled Memex-style dry run using `docs/decision-contract.md`, then compare whether review entries become more focused without adding Memex-specific scoring rules.

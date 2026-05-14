@@ -94,6 +94,7 @@ def test_score_reason_names_dimensions_that_need_attention():
 
     assert review["scores"]["review_need"] == "spot-check"
     assert "risk_visibility" in review["reason"]
+    assert "Missing explicit risk, reversibility field(s)" in review["reason"]
 
 
 def test_score_reason_says_when_no_review_is_needed():
@@ -103,6 +104,24 @@ def test_score_reason_says_when_no_review_is_needed():
 
     assert review["scores"]["review_need"] == "none"
     assert "all dimensions meet" in review["reason"]
+
+
+def test_score_uses_explicit_consumer_contract_fields_without_domain_rules():
+    source = load_memex_fixtures()[1] | {
+        "input": {
+            **load_memex_fixtures()[1]["input"],
+            "risk": "Could fragment existing synthesis if the proposal overlaps hidden coverage.",
+            "reversibility": "medium",
+            "outcome_window": "after human proposal review",
+            "reviewer_question": "Does the proposal identify the right update target?",
+        }
+    }
+
+    review = score(source, context=memex_context())
+
+    assert review["scores"]["risk_visibility"] == 1.0
+    assert "Missing explicit risk" not in review["reason"]
+    assert "No reviewer_question" not in review["reason"]
 
 
 @pytest.mark.parametrize("entry", [{}, {"id": ""}, {"id": 123}])

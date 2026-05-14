@@ -31,6 +31,8 @@ def score(
     }
     scores["review_need"] = _review_need(scores)
 
+    notes = _review_notes(entry, scores, context)
+
     return {
         "agent": REVIEW_AGENT,
         "action_type": REVIEW_ACTION_TYPE,
@@ -42,7 +44,7 @@ def score(
         },
         "parent_id": parent_id,
         "decision": "reviewed",
-        "reason": _review_reason(scores),
+        "reason": _review_reason(scores, notes),
         "scores": scores,
         "provenance": [parent_id],
         "tags": ["clerk", "decision-accountability-review"],
@@ -115,6 +117,8 @@ def _risk_visibility(entry: dict[str, Any], context: dict[str, Any]) -> float:
     material = _entry_material(entry)
     terms = _context_terms(context, "risk_terms")
     score_value = 0.0
+    if _has_contract_field(entry, "risk") or _has_contract_field(entry, "reversibility"):
+        score_value += 0.45
     if isinstance(entry.get("gate_outcome"), str) or isinstance(entry.get("human_review"), dict):
         score_value += 0.35
     if any(mark in material for mark in ("risk", "review", "held", "reject", "discard", "contradict", "safety", "blocked", "not allowed")):
@@ -134,7 +138,12 @@ def _outcome_attachability(entry: dict[str, Any], context: dict[str, Any]) -> fl
         score_value += 0.2
     if isinstance(entry.get("tags"), list) and entry["tags"]:
         score_value += 0.1
-    if context.get("outcome_window") or context.get("outcome_ref") or context.get("outcome_fields"):
+    if (
+        _has_contract_field(entry, "outcome_window")
+        or context.get("outcome_window")
+        or context.get("outcome_ref")
+        or context.get("outcome_fields")
+    ):
         score_value += 0.25
     return _clamp(score_value)
 
@@ -152,7 +161,7 @@ def _review_need(scores: dict[str, Any]) -> str:
     return "none"
 
 
-def _review_reason(scores: dict[str, Any]) -> str:
+def _review_reason(scores: dict[str, Any], notes: list[str]) -> str:
     label = scores["review_need"]
     if label == "none":
         return "Decision accountability review complete; all dimensions meet the no-review threshold."
@@ -163,10 +172,32 @@ def _review_reason(scores: dict[str, Any]) -> str:
         if key != "review_need" and isinstance(value, float) and value < 0.8
     ]
     weakest = ", ".join(weak) if weak else "no dimension below threshold"
+    note_text = f" Notes: {' '.join(notes)}" if notes else ""
     return (
         f"Decision accountability review complete; review dimensions needing attention: {weakest}; "
-        f"and review recommendation is {label}."
+        f"and review recommendation is {label}.{note_text}"
     )
+
+
+def _review_notes(
+    entry: dict[str, Any], scores: dict[str, Any], context: dict[str, Any]
+) -> list[str]:
+    notes = []
+    if scores["risk_visibility"] < 0.8:
+        missing = [
+            field
+            for field in ("risk", "reversibility")
+            if not _has_contract_field(entry, field)
+        ]
+        if missing:
+            notes.append(f"Missing explicit {', '.join(missing)} field(s).")
+    if scores["outcome_attachability"] < 0.8 and not (
+        _has_contract_field(entry, "outcome_window") or context.get("outcome_window")
+    ):
+        notes.append("Missing explicit outcome_window.")
+    if not _has_contract_field(entry, "reviewer_question"):
+        notes.append("No reviewer_question is available for focused human review.")
+    return notes
 
 
 def _context_terms(context: dict[str, Any], key: str) -> list[str]:
@@ -186,6 +217,15 @@ def _contains_any(text: str, terms: list[str]) -> bool:
 def _has_input_ref(entry: dict[str, Any]) -> bool:
     value = entry.get("input")
     return isinstance(value, dict) and isinstance(value.get("ref"), str)
+
+
+def _has_contract_field(entry: dict[str, Any], field: str) -> bool:
+    if isinstance(entry.get(field), str) and entry[field].strip():
+        return True
+    for container in (entry.get("input"), entry.get("human_review")):
+        if isinstance(container, dict) and isinstance(container.get(field), str) and container[field].strip():
+            return True
+    return False
 
 
 def _entry_material(entry: dict[str, Any]) -> str:
