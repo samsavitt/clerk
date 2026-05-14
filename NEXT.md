@@ -22,6 +22,16 @@ Only after the logger is solid: spec and build the scoring framework, the gate, 
 - **Log file path convention.** Spec defaults to `runs/<run-id>/trajectory.jsonl`. Confirm this is the right convention for clerk's consumers (Memex already uses this).
 - **Distribution.** Eventually clerk needs to be installable by other projects (Memex, Catalyst, Cortex). Decide: pip-installable package, vendored copy per consumer, or git submodule. Defer until logger is working.
 
+## Vault context
+
+- `vault:wiki/research/cluster-synthesis-2026-05-13.md` — identifies the measurement/governance layer as the cross-cluster thesis and Clerk as the primitive behind it.
+
+## Kill / graduation criteria
+
+- **Kill or park** if the logger cannot prove a clean, domain-neutral trajectory schema with simple tests.
+- **Stay in Lab** until log + grade + gate are validated by at least one consumer.
+- **Graduate to Studio** only if Clerk becomes an active shared package with real downstream integration work.
+
 ## Do not do
 
 - Do not build the gate, scoring framework, or review CLI before the logger is validated. Building them in parallel locks in interface decisions before the logger has revealed what shape they need.
