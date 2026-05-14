@@ -1,0 +1,72 @@
+[
+  {
+    "schema": "clerk/v1",
+    "id": "memex-fixture-discard-001",
+    "ts": "2026-05-13T17:25:00Z",
+    "agent": "memex-ingest",
+    "action_type": "ingest-classify",
+    "input": {
+      "ref": "raw/inbox/duplicate-agent-memory-note.md",
+      "tier": 2
+    },
+    "decision": "discard",
+    "reason": "The source repeats existing wiki coverage and does not add a new mechanism, contradiction, or example.",
+    "provenance": [
+      "wiki/INDEX.md",
+      "wiki/synthesis/llm-agent-memory-rag-architecture.md"
+    ],
+    "scores": {
+      "source_tier": 2
+    },
+    "proposal_path": "runs/2026-05-13-ingest-dryrun-001/proposals/duplicate-agent-memory-note.md",
+    "tags": ["memex", "fixture", "discard"]
+  },
+  {
+    "schema": "clerk/v1",
+    "id": "memex-fixture-update-001",
+    "ts": "2026-05-13T17:35:00Z",
+    "agent": "memex-ingest",
+    "action_type": "ingest-classify",
+    "input": {
+      "ref": "raw/inbox/paper-coevoskills.md",
+      "tier": 1
+    },
+    "decision": "ingest-and-update",
+    "reason": "Primary research introduces a concrete skill-evolution mechanism that fills explicit gaps in existing autonomous-agent and self-evolving-agent coverage.",
+    "provenance": [
+      "wiki/INDEX.md",
+      "wiki/synthesis/autonomous-agent-architecture.md",
+      "wiki/synthesis/self-evolving-agent-systems-playbook.md",
+      "wiki/concepts/self-evolving-agents.md"
+    ],
+    "scores": {
+      "source_tier": 1
+    },
+    "gate_outcome": "held",
+    "proposal_path": "runs/2026-05-13-ingest-dryrun-001/proposals/paper-coevoskills.md",
+    "tags": ["memex", "fixture", "ingest-and-update"]
+  },
+  {
+    "schema": "clerk/v1",
+    "id": "memex-fixture-low-grade-001",
+    "ts": "2026-05-13T17:45:00Z",
+    "agent": "memex-ingest",
+    "action_type": "ingest-classify",
+    "input": {
+      "ref": "raw/inbox/social-thread-claim.md",
+      "tier": 3
+    },
+    "decision": "flag-for-review-low-grade",
+    "reason": "The source claims a contradiction but is social-grade and lacks an identifiable Tier 1 anchor, so it should be surfaced for review rather than used to alter synthesis.",
+    "provenance": [
+      "wiki/INDEX.md",
+      "wiki/synthesis/autonomous-agent-architecture.md"
+    ],
+    "scores": {
+      "source_tier": 3
+    },
+    "gate_outcome": "held",
+    "proposal_path": "runs/2026-05-13-ingest-dryrun-001/proposals/social-thread-claim.md",
+    "tags": ["memex", "fixture", "low-grade-review"]
+  }
+]
