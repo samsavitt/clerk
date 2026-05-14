@@ -58,6 +58,10 @@ Append-only. Never edit or delete entries. If an entry is wrong, append a correc
 {"schema":"clerk/v1","id":"01957a2f-...","ts":"2026-05-13T17:35:00Z","agent":"cortex-trade","action_type":"trade-rationale","input":{"ref":"signals/2026-05-13/aapl.json","instrument":"AAPL","direction":"long"},"decision":"approve","reason":"VGRSI signal + low-uncertainty residual; passes risk filter.","provenance":["signals/vgrsi/aapl.parquet","residuals/2026-05-13.parquet"],"scores":{"signal_strength":0.74,"uncertainty":0.21,"factor_loading":"momentum-dominant"},"gate_outcome":"held"}
 ```
 
+### Outcome attachment
+
+Outcome entries are separate entries with `action_type:"decision-outcome"` and `parent_id` pointing at the original decision. They record later results such as `accepted`, `rejected`, `later-useful`, or `reversed` without editing the original entry. See `docs/outcomes.md`.
+
 ## Conventions to keep stable
 
 - `schema` field is mandatory and versioned. Future field additions are minor; field removals or type changes are major.

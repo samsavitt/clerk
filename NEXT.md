@@ -10,15 +10,16 @@
 - Scoring direction specified in `docs/scoring.md`: Clerk scoring is decision-accountability review, not domain evaluation.
 - Non-invasive Memex compatibility fixtures exist in `tests/fixtures/memex_compatibility.json`; they verify Clerk can record Memex-style ingest decisions without importing Memex rules or touching Memex runtime.
 - Scoring v0 implemented in `src/clerk/scoring.py`; it returns separate `decision-accountability-review` entries and never mutates the original decision.
+- Outcome attachment v0 implemented in `src/clerk/outcomes.py`; it returns separate `decision-outcome` entries with `parent_id` pointing at the original decision and never mutates the original decision.
 - Ledger-usefulness review exists at `docs/reviews/ledger-usefulness-2026-05-14.md`.
 - Test harness exists in `tests/test_logger.py`.
-- Verification on 2026-05-14: `python3 -m pytest` passed, 35 tests. Coverage includes required fields, auto-fill rules, wrong-type refusals, oversize-entry refusal, CLI success/failure, parent directory creation, 30-entry concurrent append behavior, Memex compatibility fixtures, and scoring review entries.
+- Verification on 2026-05-14: `python3 -m pytest` passed, 49 tests. Coverage includes required fields, auto-fill rules, wrong-type refusals, oversize-entry refusal, CLI success/failure, parent directory creation, 30-entry concurrent append behavior, Memex compatibility fixtures, scoring review entries, and outcome attachment entries.
 - Origin context: extracted from the Memex substrate maintenance loop's trajectory log pattern. The cluster-synthesis (`vault:wiki/research/cluster-synthesis-2026-05-13.md`) identified "supervision layer for AI" as a cross-cluster meta-thesis; clerk is the standalone implementation of that thesis's load-bearing primitive (log + grade + gate).
 
 ## Next action
 
 1. **Run one controlled Memex dry-run trial.** Take real Memex dry-run trajectory output, convert it to Clerk entries, score it, and inspect whether review entries reveal audit gaps that raw Memex logs do not.
-2. **Decide whether Clerk needs outcome attachment before gates.** The current scoring review is useful for auditability, but outcome usefulness requires a later accepted/rejected/useful signal.
+2. **Attach outcomes after human review.** For each reviewed Memex proposal, append `accepted`, `rejected`, `later-useful`, `reversed`, `caused-correction`, `human-disagreement`, or `unclear` outcome entries. Use those only as calibration evidence.
 3. **Only if the trial is useful, wire Clerk into a Memex test harness.** Keep it supervised and test-vault-only. No real vault writes, x-growth integration, gate enforcement, UI, remote storage, or log rotation.
 
 Only after the logger is solid: spec and build the scoring framework, the gate, and the review CLI. Do not build them in parallel.
@@ -29,6 +30,7 @@ Only after the logger is solid: spec and build the scoring framework, the gate, 
 - **ID generation.** Resolved for v0: inline UUIDv7-compatible generation, no external dependency.
 - **Log file path convention.** v0 accepts any explicit path and tests `runs/<run-id>/trajectory.jsonl`; confirm this convention during first consumer trial.
 - **Scoring model.** Resolved for v0: separate append-only review entries, never mutation of the original decision entry.
+- **Outcome model.** Resolved for v0: separate append-only outcome entries using a small shared label set, never mutation of the original decision entry.
 - **Distribution.** Eventually clerk needs to be installable by other projects (Memex, Catalyst, Cortex). Decide: pip-installable package, vendored copy per consumer, or git submodule. Defer until logger is working.
 
 ## Vault context
@@ -43,7 +45,7 @@ Only after the logger is solid: spec and build the scoring framework, the gate, 
 
 ## Do not do
 
-- Do not build the gate, scoring framework, or review CLI before the logger is validated. Building them in parallel locks in interface decisions before the logger has revealed what shape they need.
+- Do not build the gate or review CLI before logger, scoring, and outcome attachment have been validated together in one consumer dry-run.
 - Do not bake any Memex- or domain-specific assumptions into clerk's code. Domain-specific scoring rules live in the consumer, not in clerk itself.
 - Do not touch x-growth while shaping Clerk's scoring contract. x-growth is active work and should not become a Clerk proving ground until Clerk earns integration.
 - Do not wire Clerk into Memex runtime yet. Use fixtures/examples only until scoring v0 proves useful.
