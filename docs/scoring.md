@@ -103,6 +103,20 @@ Clerk should not validate whether a Tier 3 source is allowed to update a synthes
 - No domain-specific scoring rules inside Clerk.
 - No outcome database beyond append-only entries.
 
-## First Implementation Step
+## Current Implementation
 
-Before implementing scoring code, write fixtures that represent real consumer decisions and verify that the logger can preserve them. Then implement the scorer as a pure library function that produces separate review entries.
+Scoring v0 is implemented as `clerk.scoring.score(entry, context=None)`.
+
+It is deliberately lightweight:
+
+- pure library function,
+- no file writes,
+- no gate enforcement,
+- no consumer integration,
+- no domain-specific correctness checks.
+
+It returns a separate `decision-accountability-review` entry that can be logged with `clerk.log()`.
+
+## Next Implementation Step
+
+Use scoring v0 in one controlled consumer trial only after the ledger-usefulness review remains promising. The first trial should be Memex dry-run output, not x-growth.

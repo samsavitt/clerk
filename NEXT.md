@@ -9,15 +9,17 @@
   - `pyproject.toml` defines the package and console script.
 - Scoring direction specified in `docs/scoring.md`: Clerk scoring is decision-accountability review, not domain evaluation.
 - Non-invasive Memex compatibility fixtures exist in `tests/fixtures/memex_compatibility.json`; they verify Clerk can record Memex-style ingest decisions without importing Memex rules or touching Memex runtime.
+- Scoring v0 implemented in `src/clerk/scoring.py`; it returns separate `decision-accountability-review` entries and never mutates the original decision.
+- Ledger-usefulness review exists at `docs/reviews/ledger-usefulness-2026-05-14.md`.
 - Test harness exists in `tests/test_logger.py`.
-- Verification on 2026-05-14: `python3 -m pytest` passed, 27 tests. Coverage includes required fields, auto-fill rules, wrong-type refusals, oversize-entry refusal, CLI success/failure, parent directory creation, 30-entry concurrent append behavior, and Memex compatibility fixtures.
+- Verification on 2026-05-14: `python3 -m pytest` passed, 35 tests. Coverage includes required fields, auto-fill rules, wrong-type refusals, oversize-entry refusal, CLI success/failure, parent directory creation, 30-entry concurrent append behavior, Memex compatibility fixtures, and scoring review entries.
 - Origin context: extracted from the Memex substrate maintenance loop's trajectory log pattern. The cluster-synthesis (`vault:wiki/research/cluster-synthesis-2026-05-13.md`) identified "supervision layer for AI" as a cross-cluster meta-thesis; clerk is the standalone implementation of that thesis's load-bearing primitive (log + grade + gate).
 
 ## Next action
 
-1. **Implement scoring v0 as a pure library function.** It should receive one Clerk entry plus optional consumer-supplied context, and return a separate `decision-accountability-review` Clerk entry with `parent_id` pointing at the original.
-2. **Test scoring v0 against the Memex fixtures.** The scorer should review record quality only: rationale clarity, provenance sufficiency, criterion fit, risk visibility, outcome attachability, and review need. It must not decide whether Memex's disposition is correct.
-3. **Run the full test suite.** Keep this as library-only work. No gate, review UI, remote storage, log rotation, Memex runtime integration, or x-growth integration.
+1. **Run one controlled Memex dry-run trial.** Take real Memex dry-run trajectory output, convert it to Clerk entries, score it, and inspect whether review entries reveal audit gaps that raw Memex logs do not.
+2. **Decide whether Clerk needs outcome attachment before gates.** The current scoring review is useful for auditability, but outcome usefulness requires a later accepted/rejected/useful signal.
+3. **Only if the trial is useful, wire Clerk into a Memex test harness.** Keep it supervised and test-vault-only. No real vault writes, x-growth integration, gate enforcement, UI, remote storage, or log rotation.
 
 Only after the logger is solid: spec and build the scoring framework, the gate, and the review CLI. Do not build them in parallel.
 

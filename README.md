@@ -8,7 +8,7 @@ Other projects (Memex, Catalyst, Sentinel, Cortex) are downstream consumers — 
 
 ## Status
 
-Logger v0 implemented and tested. Scoring is specified as decision-accountability review, not domain evaluation. Gates are not implemented yet. See `docs/schema.md`, `docs/logger.md`, `docs/scoring.md`, and `NEXT.md`.
+Logger v0 and scoring v0 implemented and tested. Scoring is decision-accountability review, not domain evaluation. Gates are not implemented yet. See `docs/schema.md`, `docs/logger.md`, `docs/scoring.md`, and `NEXT.md`.
 
 ## Why this exists
 
