@@ -36,6 +36,7 @@
 - Test harness exists in `tests/test_logger.py`.
 - Verification on 2026-05-14: `python3 -m pytest` passed, 54 tests. Coverage includes required fields, auto-fill rules, wrong-type refusals, oversize-entry refusal, CLI success/failure, parent directory creation, 30-entry concurrent append behavior, Memex compatibility fixtures, scoring review entries, decision-contract field recognition, outcome attachment entries, ledger grouping, unresolved reviewer questions, and CLI report output.
 - Origin context: extracted from the Memex substrate maintenance loop's trajectory log pattern. The cluster-synthesis (`vault:wiki/research/cluster-synthesis-2026-05-13.md`) identified "supervision layer for AI" as a cross-cluster meta-thesis; clerk is the standalone implementation of that thesis's load-bearing primitive (log + grade + gate).
+- New vault source implication: `vault:wiki/sources/hamel-rapidly-improving-ai-products.md` reinforces Clerk's direction toward binary judgments plus critiques, human/LLM alignment checks, and outcome-calibrated review rather than generic scoring. `vault:wiki/sources/wolfram-chatgpt-why-it-works.md` reinforces the distinction between fluent output and checkable evidence.
 
 ## Next action
 
@@ -57,6 +58,8 @@ Do not build gates, a review UI, or runtime integration until Clerk has a small 
 ## Vault context
 
 - `vault:wiki/research/cluster-synthesis-2026-05-13.md` — identifies the measurement/governance layer as the cross-cluster thesis and Clerk as the primitive behind it.
+- `vault:wiki/sources/hamel-rapidly-improving-ai-products.md` — supports binary judgment, critique, criteria drift, and eval alignment discipline.
+- `vault:wiki/sources/wolfram-chatgpt-why-it-works.md` — supports the need for checkable tools/constraints beyond fluent generation.
 
 ## Kill / graduation criteria
 
