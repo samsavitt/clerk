@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 SCHEMA = "clerk/v1"
+JUDGMENT_SCHEMA = "clerk/judgment/v1"
 MAX_ATOMIC_WRITE_BYTES = 4096
 
 REQUIRED_FIELDS = {
@@ -33,6 +34,24 @@ OPTIONAL_FIELDS = {
     "parent_id": str,
     "tags": list,
     "human_review": dict,
+}
+
+JUDGMENT_REQUIRED_FIELDS = {
+    "schema": str,
+    "judgment_id": str,
+    "domain": str,
+    "decision_time": str,
+    "authorizer_id": str,
+    "inputs_hash": str,
+    "judgment_payload": dict,
+    "outcome_window": str,
+    "outcome_attached": bool,
+}
+
+JUDGMENT_OPTIONAL_FIELDS = {
+    "provenance": list,
+    "tags": list,
+    "parent_id": str,
 }
 
 
@@ -71,10 +90,16 @@ def _prepare_entry(entry: dict[str, Any]) -> dict[str, Any]:
         raise ValidationError("entry must be a JSON object")
 
     written = dict(entry)
-    written.setdefault("schema", SCHEMA)
-    written.setdefault("id", _uuid7())
-    written.setdefault("ts", _utc_now())
-    _validate(written)
+    if written.get("schema") == JUDGMENT_SCHEMA:
+        written.setdefault("judgment_id", _uuid7())
+        written.setdefault("decision_time", _utc_now())
+        written.setdefault("outcome_attached", False)
+        _validate_judgment(written)
+    else:
+        written.setdefault("schema", SCHEMA)
+        written.setdefault("id", _uuid7())
+        written.setdefault("ts", _utc_now())
+        _validate(written)
     return written
 
 
@@ -89,6 +114,27 @@ def _validate(entry: dict[str, Any]) -> None:
             )
 
     for field, expected_type in OPTIONAL_FIELDS.items():
+        if field in entry and not isinstance(entry[field], expected_type):
+            raise ValidationError(
+                f"field {field!r} must be {expected_type.__name__}, "
+                f"got {type(entry[field]).__name__}"
+            )
+
+    _validate_string_array(entry, "provenance")
+    _validate_string_array(entry, "tags")
+
+
+def _validate_judgment(entry: dict[str, Any]) -> None:
+    for field, expected_type in JUDGMENT_REQUIRED_FIELDS.items():
+        if field not in entry:
+            raise ValidationError(f"missing required field: {field}")
+        if not isinstance(entry[field], expected_type):
+            raise ValidationError(
+                f"field {field!r} must be {expected_type.__name__}, "
+                f"got {type(entry[field]).__name__}"
+            )
+
+    for field, expected_type in JUDGMENT_OPTIONAL_FIELDS.items():
         if field in entry and not isinstance(entry[field], expected_type):
             raise ValidationError(
                 f"field {field!r} must be {expected_type.__name__}, "

@@ -29,11 +29,11 @@ These fields make review entries more useful without making Clerk domain-specifi
 
 These are accountability fields. They do not tell Clerk whether the decision is correct.
 
-## Memex dry-run example
+## Example
 
 ```json
 {
-  "agent": "memex-ingest",
+  "agent": "research-agent",
   "action_type": "ingest-classify",
   "input": {
     "ref": "raw/inbox/paper-example.md",
@@ -49,7 +49,7 @@ These are accountability fields. They do not tell Clerk whether the decision is 
     "wiki/synthesis/example.md"
   ],
   "proposal_path": "runs/example/proposals/paper-example.md",
-  "tags": ["memex", "dry-run"]
+  "tags": ["clerk", "dry-run"]
 }
 ```
 
@@ -64,6 +64,6 @@ Use Clerk for decisions where later regret or learning matters:
 
 Do not use Clerk for routine reads, status messages, or every intermediate thought.
 
-The next useful trial is to run a Memex-style dry run with these recommended fields present, then compare whether Clerk's review entries become more focused without adding Memex-specific scoring rules.
+Use `python -m clerk.cli report <ledger.jsonl>` to inspect whether decisions, reviews, outcomes, and unresolved reviewer questions are easy to review as a grouped ledger.
 
 Use `python -m clerk.cli report <ledger.jsonl>` to inspect whether decisions, reviews, outcomes, and unresolved reviewer questions are easy to review as a grouped ledger.

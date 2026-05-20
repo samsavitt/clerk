@@ -16,3 +16,11 @@ venv/
 
 # Operational run artifacts (logs accumulate per use; not source)
 runs/
+
+# Internal session and adapter files — not for public repo
+AGENTS.md
+CLAUDE.md
+NEXT.md
+
+# Internal review logs
+docs/reviews/

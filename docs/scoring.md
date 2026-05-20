@@ -2,7 +2,7 @@
 
 Clerk scoring is not domain evaluation. It is decision-accountability review.
 
-The scorer does not decide whether a Memex source should be ingested, whether a content candidate is good, or whether a trade rationale is attractive. The consumer owns that domain judgment. Clerk scores whether the decision record is legible enough to audit, compare, learn from, and later connect to outcomes.
+The scorer does not decide whether a source should be ingested, whether a content candidate is good, or whether a trade rationale is attractive. The consumer owns that domain judgment. Clerk scores whether the decision record is legible enough to audit, compare, learn from, and later connect to outcomes.
 
 ## Boundary
 
@@ -17,7 +17,7 @@ Consumers own:
 - the human approval policy,
 - the outcome definition.
 
-For Memex, this means Memex owns source tiers, disposition constraints, proposal quality, wiki safety boundaries, and whether an ingest/update/contradiction decision is correct.
+For an ingestion agent, this means the agent owns source tiers, disposition constraints, proposal quality, and whether an ingest/update/contradiction decision is correct.
 
 ### Clerk-owned
 
@@ -80,28 +80,25 @@ Appending a separate review entry preserves the ledger. It also lets multiple re
 
 For consumer-facing decision shape, see `docs/decision-contract.md`. The recommended fields `risk`, `reversibility`, `outcome_window`, and `reviewer_question` are accountability fields, not domain judgments.
 
-## Memex Compatibility
+## Consumer field mapping
 
-Memex trajectory entries should map into Clerk without Clerk understanding Memex's domain rules.
+Consumer trajectory fields map into Clerk without Clerk understanding domain rules. Example for a knowledge ingestion agent:
 
-Memex source fields:
-
-| Memex trajectory field | Clerk field |
+| Consumer field | Clerk field |
 |---|---|
 | `source` | `input.ref` |
-| `tier` | `input.tier` or `scores.source_tier` if Memex wants tier as a domain score |
+| `tier` | `input.tier` or `scores.source_tier` |
 | `disposition` | `decision` |
 | `pages_read` | `provenance` |
 | `proposal` | `proposal_path` |
 
-Clerk should not validate whether a Tier 3 source is allowed to update a synthesis page. That rule belongs in Memex. Clerk can score whether the decision record makes the tier constraint visible and reviewable.
+Clerk should not validate whether a tier-3 source is allowed to update a given page. That rule belongs in the consumer. Clerk scores whether the decision record makes the tier constraint visible and reviewable.
 
 ## What Not To Build Yet
 
 - No gate implementation.
 - No review UI.
-- No x-growth integration.
-- No Memex runtime integration.
+- No consumer runtime integration.
 - No domain-specific scoring rules inside Clerk.
 - No outcome database beyond append-only entries.
 
@@ -122,4 +119,4 @@ When dimensions are weak, the review reason names concrete missing accountabilit
 
 ## Next Implementation Step
 
-Run a second controlled Memex-style dry run using `docs/decision-contract.md`, then compare whether review entries become more focused without adding Memex-specific scoring rules.
+Run a second controlled dry run using `docs/decision-contract.md`, then compare whether review entries become more focused without adding consumer-specific scoring rules.

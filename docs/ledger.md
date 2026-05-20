@@ -26,4 +26,4 @@ The report does not score, gate, apply proposals, or write files. It only groups
 - `decision-accountability-review` entries,
 - `decision-outcome` entries.
 
-This is the next review surface before any Memex runtime integration.
+The report is read-only and makes no changes to the ledger or any consumer state.

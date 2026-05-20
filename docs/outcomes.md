@@ -21,9 +21,9 @@ V0 uses a small shared vocabulary:
 ## Example
 
 ```json
-{"schema":"clerk/v1","id":"01957a30-...","ts":"2026-05-14T17:05:00Z","agent":"clerk-outcome","action_type":"decision-outcome","input":{"ref":"decision-001","outcome":"accepted","agent":"memex-ingest","action_type":"ingest-classify","decision":"ingest-and-update","outcome_ref":"runs/review/proposals/source.md","reviewer":"sam"},"parent_id":"decision-001","decision":"accepted","reason":"Human review accepted the proposed wiki update.","scores":{"outcome":"accepted"},"provenance":["decision-001","runs/review/proposals/source.md"],"tags":["clerk","decision-outcome","accepted"]}
+{"schema":"clerk/v1","id":"01957a30-...","ts":"2026-05-14T17:05:00Z","agent":"clerk-outcome","action_type":"decision-outcome","input":{"ref":"decision-001","outcome":"accepted","agent":"research-agent","action_type":"ingest-classify","decision":"ingest-and-update","outcome_ref":"runs/review/proposals/source.md","reviewer":"human"},"parent_id":"decision-001","decision":"accepted","reason":"Human review accepted the proposed wiki update.","scores":{"outcome":"accepted"},"provenance":["decision-001","runs/review/proposals/source.md"],"tags":["clerk","decision-outcome","accepted"]}
 ```
 
 ## Current boundary
 
-Outcome entries are calibration data only. Clerk does not yet update scoring weights, enforce gates, or apply proposals from outcome data. The next useful consumer trial is to run Clerk over a Memex dry-run, then attach `accepted`, `rejected`, or `later-useful` outcomes after human review.
+Outcome entries are calibration data only. Clerk does not yet update scoring weights, enforce gates, or apply proposals from outcome data. The next useful consumer trial is to attach `accepted`, `rejected`, or `later-useful` outcomes to a completed dry run, then check whether scoring dimensions predicted the outcome direction.

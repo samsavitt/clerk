@@ -15,7 +15,7 @@ Append-only. Never edit or delete entries. If an entry is wrong, append a correc
 | `schema` | string | Schema version. Currently `clerk/v1`. Allows future evolution. |
 | `id` | string | Unique entry identifier. UUIDv7 recommended (timestamped, sortable). |
 | `ts` | string | ISO8601 timestamp with timezone, e.g., `2026-05-13T19:42:11Z`. |
-| `agent` | string | Identifier for the agent that produced this entry. Convention: `<project>-<role>`, e.g., `memex-ingest`, `catalyst-scorer`. |
+| `agent` | string | Identifier for the agent that produced this entry. Convention: `<project>-<role>`, e.g., `research-agent`, `content-scorer`. |
 | `action_type` | string | What kind of decision this is. Convention: kebab-case verb, e.g., `ingest-classify`, `content-score`, `trade-rationale`. |
 | `input` | object | What the agent was operating on. Free-form JSON; agent-specific shape. Minimum convention: include a `ref` field pointing at the source artifact (file path, URL, identifier). |
 | `decision` | string | What was decided. Domain-specific value. Convention: enumerated set per `action_type`, e.g., `discard`, `ingest-new`, `approve`, `reject`. |
@@ -40,22 +40,22 @@ Append-only. Never edit or delete entries. If an entry is wrong, append a correc
 
 ## Example entries
 
-### Memex ingest (already exists in this form)
+### Knowledge ingestion agent
 
 ```json
-{"schema":"clerk/v1","id":"01957a2d-...","ts":"2026-05-13T17:25:00Z","agent":"memex-ingest","action_type":"ingest-classify","input":{"ref":"raw/inbox/paper-2604.01687-coevoskills.md"},"decision":"ingest-and-update","reason":"Novel paper fills three structurally explicit slots in existing self-evolving-agents coverage.","provenance":["wiki/INDEX.md","wiki/synthesis/self-evolving-agent-systems-playbook.md","wiki/concepts/self-evolving-agents.md"],"scores":{"tier":1,"coverage":1.0},"gate_outcome":"held","proposal_path":"runs/2026-05-13-ingest-dryrun-001/proposals/paper-coevoskills.md"}
+{"schema":"clerk/v1","id":"01957a2d-...","ts":"2026-05-13T17:25:00Z","agent":"research-agent","action_type":"ingest-classify","input":{"ref":"raw/inbox/paper-example.md"},"decision":"ingest-and-update","reason":"Novel paper fills three structurally explicit slots in existing coverage.","provenance":["wiki/INDEX.md","wiki/synthesis/example.md"],"scores":{"tier":1,"coverage":1.0},"gate_outcome":"held","proposal_path":"runs/2026-05-13/proposals/paper-example.md"}
 ```
 
-### Hypothetical content scorer (Catalyst)
+### Content scoring agent
 
 ```json
-{"schema":"clerk/v1","id":"01957a2e-...","ts":"2026-05-13T17:30:00Z","agent":"catalyst-scorer","action_type":"content-score","input":{"ref":"drafts/2026-05-13/post-003.md","topic":"AI evals"},"decision":"approve","reason":"High calibrated surprise; productive-anxiety arousal class; trending half-life.","scores":{"calibrated_surprise":0.82,"arousal_class":"productive-anxiety","half_life":"trending"},"gate_outcome":"auto-approve"}
+{"schema":"clerk/v1","id":"01957a2e-...","ts":"2026-05-13T17:30:00Z","agent":"content-scorer","action_type":"content-score","input":{"ref":"drafts/2026-05-13/post-003.md","topic":"AI evals"},"decision":"approve","reason":"High calibrated surprise; productive-anxiety arousal class; trending half-life.","scores":{"calibrated_surprise":0.82,"arousal_class":"productive-anxiety","half_life":"trending"},"gate_outcome":"auto-approve"}
 ```
 
-### Hypothetical trade rationale (Cortex)
+### Trade rationale agent
 
 ```json
-{"schema":"clerk/v1","id":"01957a2f-...","ts":"2026-05-13T17:35:00Z","agent":"cortex-trade","action_type":"trade-rationale","input":{"ref":"signals/2026-05-13/aapl.json","instrument":"AAPL","direction":"long"},"decision":"approve","reason":"VGRSI signal + low-uncertainty residual; passes risk filter.","provenance":["signals/vgrsi/aapl.parquet","residuals/2026-05-13.parquet"],"scores":{"signal_strength":0.74,"uncertainty":0.21,"factor_loading":"momentum-dominant"},"gate_outcome":"held"}
+{"schema":"clerk/v1","id":"01957a2f-...","ts":"2026-05-13T17:35:00Z","agent":"trade-agent","action_type":"trade-rationale","input":{"ref":"signals/2026-05-13/aapl.json","instrument":"AAPL","direction":"long"},"decision":"approve","reason":"Signal strength + low-uncertainty residual; passes risk filter.","provenance":["signals/vgrsi/aapl.parquet","residuals/2026-05-13.parquet"],"scores":{"signal_strength":0.74,"uncertainty":0.21,"factor_loading":"momentum-dominant"},"gate_outcome":"held"}
 ```
 
 ### Outcome attachment

@@ -25,7 +25,7 @@ The logger is the smallest component of clerk: it accepts an entry, validates it
 from clerk import logger
 
 entry = {
-    "agent": "memex-ingest",
+    "agent": "research-agent",
     "action_type": "ingest-classify",
     "input": {"ref": "raw/inbox/paper-X.md"},
     "decision": "ingest-new",
@@ -41,7 +41,7 @@ written = logger.log(entry, log_path="runs/2026-05-13/trajectory.jsonl")
 ### CLI
 
 ```sh
-echo '{"agent":"memex-ingest","action_type":"ingest-classify","input":{"ref":"x.md"},"decision":"discard","reason":"duplicate"}' \
+echo '{"agent":"research-agent","action_type":"ingest-classify","input":{"ref":"x.md"},"decision":"discard","reason":"duplicate"}' \
   | clerk log --to runs/2026-05-13/trajectory.jsonl
 ```
 
