@@ -21,6 +21,7 @@ runs/
 AGENTS.md
 CLAUDE.md
 NEXT.md
+.claude/settings.local.json
 
 # Internal review logs
 docs/reviews/
