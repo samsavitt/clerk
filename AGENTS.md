@@ -18,3 +18,7 @@ Run focused tests before claiming success. If verification is not possible, stat
 ## Safety
 
 Do not commit, push, install dependencies, or perform destructive actions unless explicitly approved. Never stage `.env` or credentials.
+
+## Vault context
+
+At session start, search `vault:wiki/INDEX.md` for relevant material using these terms: accountability ledger, supervision primitive, agent decisions outcome tracking, behavioral economics. Read only matching sections that directly augment current work.
