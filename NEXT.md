@@ -1,6 +1,6 @@
 # Next
 
-## Current state
+## State
 
 - Clerk is the domain-neutral judgment logger for authorization infrastructure.
 - Logger, decision-contract, scoring, outcome attachment, ledger report, and judgment schema v1 are operational.
@@ -11,7 +11,7 @@
 
 Do no standalone Clerk work until another consumer needs logger hardening. If a consumer change touches Clerk, run `python3 -m pytest` in `Lab/clerk/` and preserve backward compatibility.
 
-## Open decisions
+## Blockers / open decisions
 
 - Distribution model after two active consumers: pip package, vendored copy, or submodule.
 - Whether future schema variants need a registry file or can stay documented in consumer contracts.
