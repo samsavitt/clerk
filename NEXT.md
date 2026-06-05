@@ -6,6 +6,7 @@
 - Logger, decision-contract, scoring, outcome attachment, ledger report, and judgment schema v1 are operational.
 - Existing Memex compatibility remains a constraint, but auth-infra is the primary active consumer path.
 - Clerk should stay a primitive: append-only records in, replayable judgment ledger out.
+- **First-test signal:** keep Clerk in Lab until a consumer needs stable shared-infrastructure packaging; current evidence is compatibility across auth-infra, Memex, and consumer contracts without domain logic leaking into Clerk core.
 
 ## Next action
 
