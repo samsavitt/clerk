@@ -25,3 +25,6 @@ NEXT.md
 
 # Internal review logs
 docs/reviews/
+
+# CANON.md is a read-only artifact pushed from the vault (single source of truth)
+CANON.md
