@@ -14,9 +14,6 @@ Clerk is a Lab prototype for the domain-neutral supervision primitive: log + gra
 ## Verification
 
 Run focused tests before claiming success. If verification is not possible, state what is missing.
-## Support-Layer Scan
-
-Default to support-first for material work: before material analysis, planning, implementation, review, or final reporting, use at least one relevant support layer unless there is a clear reason not to. Start with repo truth; use vault RAG for prior decisions, research, cross-domain context, or strategy; invoke 1-3 relevant skills or profiles for known procedures or review lenses; use subagents for independent research, review, or validation; use live web for current external facts. Do not invoke every skill; choose the smallest relevant slate and name deliberate skips. Final summaries must include `Support used: RAG=<...>; skills=<...>; subagents=<...>; live=<...>; skipped=<...>; changed=<what changed because of support>.`
 
 ## Safety
 
