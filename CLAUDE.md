@@ -26,3 +26,14 @@ At session start, search `vault:wiki/INDEX.md` for relevant material using these
 ## Applied Learning
 
 None yet.
+
+<!-- GIT-SYNC:START (identical in every repo; source: samsavitt/dotfiles claude/sync-rule.md) -->
+## Git sync
+
+GitHub is the single source of truth: any machine, cloud session or AI continues from what is pushed.
+
+- **Start:** `git pull --ff-only` before changing anything; if it cannot fast-forward, sort that out first.
+- **Finish:** before ending any task that changed files, commit and push — pre-approved, do not ask Sam. On a branch, open a PR and merge it once checks pass, then delete the branch.
+- **Exception:** if merging deploys or publishes, or this repo's own instructions forbid it, open a draft PR and tell Sam.
+- Never force-push, rewrite shared history, bypass repo gates, or commit secrets. Files kept out of git on purpose do not travel.
+<!-- GIT-SYNC:END -->
